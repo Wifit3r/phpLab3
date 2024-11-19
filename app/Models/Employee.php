@@ -16,6 +16,7 @@ class Employee extends Model
         'birth_year',
         'education',
         'specialty',
-        'registration_date'
+        'registration_date',
+        'creator_user_id'
     ];
 }

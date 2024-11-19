@@ -7,6 +7,11 @@ use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Employee::class, 'employee');
+    }
+
     public function index()
     {
         $employees = Employee::all();
@@ -24,13 +29,17 @@ class EmployeeController extends Controller
             'code' => 'required',
             'name' => 'required',
             'gender' => 'required',
-            'birth_year' => 'required',
+            'birth_year' => 'required|integer',
             'education' => 'required',
             'specialty' => 'required',
-            'registration_date' => 'required'
+            'registration_date' => 'required|date'
         ]);
 
-        Employee::create($request->all());
+        $data = $request->all();
+        $data['creator_user_id'] = auth()->user()->id;
+
+        Employee::create($data);
+
         return redirect()->route('employees.index')
             ->with('success', 'Employee created successfully.');
     }
@@ -51,10 +60,10 @@ class EmployeeController extends Controller
             'code' => 'required',
             'name' => 'required',
             'gender' => 'required',
-            'birth_year' => 'required',
+            'birth_year' => 'required|integer',
             'education' => 'required',
             'specialty' => 'required',
-            'registration_date' => 'required'
+            'registration_date' => 'required|date'
         ]);
 
         $employee->update($request->all());
